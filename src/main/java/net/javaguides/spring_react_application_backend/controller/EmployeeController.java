@@ -14,7 +14,7 @@ public class EmployeeController {
 
     private EmployeeService employeeService;
 
-    //おそらくRequestMappingナシで@GetMapping("/api/employees/")でも可
+    //おそらくRequestMappingナシで@GePostMapping("/api/employees/")でも可
     @PostMapping
     public ResponseEntity<EmployeeDto> createEmployee(@RequestBody EmployeeDto employeeDto){
         EmployeeDto savedEmployee = employeeService.createEmployee(employeeDto);

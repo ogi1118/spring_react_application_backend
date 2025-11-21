@@ -14,6 +14,7 @@ import lombok.Setter;
 @Table(name = "employees")
 public class Employee {
 
+    // 変数名とカラム名が同じで条件も無ければ@Columnアノテーション不用
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

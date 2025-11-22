@@ -6,8 +6,10 @@ import net.javaguides.spring_react_application_backend.entity.Employee;
 import net.javaguides.spring_react_application_backend.exception.ResourceNotFoundException;
 import net.javaguides.spring_react_application_backend.mapper.EmployeeMapper;
 import net.javaguides.spring_react_application_backend.repository.EmployeeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @AllArgsConstructor // フィールドが一つの場合自動的にDIしてくれる(AutoWiredと一緒)
@@ -34,4 +36,21 @@ public class EmployeeServiceImpl implements EmployeeService{
 
         return EmployeeMapper.mapToEmployeeDto(employee);
     }
+
+    @Override
+    public List<EmployeeDto> getEmployees() {
+//        List<Employee> employeeList = employeeRepository.findAll();
+//        List<EmployeeDto> employeeDtoList = new ArrayList<>();
+//        for(Employee employee : employeeList){
+//            employeeDtoList.add(EmployeeMapper.mapToEmployeeDto(employee));
+//        }
+//        return employeeDtoList;
+//        // ↑でもいいけど
+        List<Employee> employees = employeeRepository.findAll();
+        return employees.stream()
+                .map(EmployeeMapper::mapToEmployeeDto) // .map((employee) -> EmployeeMapper.mapToEmployeeDto(employee))
+                .toList();
+    }
+
+
 }

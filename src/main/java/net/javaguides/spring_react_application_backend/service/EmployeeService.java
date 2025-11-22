@@ -7,4 +7,6 @@ import net.javaguides.spring_react_application_backend.dto.EmployeeDto;
 public interface EmployeeService {
     EmployeeDto createEmployee(EmployeeDto employeeDto);
 
+    EmployeeDto getEmployeeById(Long employeeId);
+
 }

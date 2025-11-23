@@ -52,5 +52,22 @@ public class EmployeeServiceImpl implements EmployeeService{
                 .toList();
     }
 
+    @Override
+    public EmployeeDto updateEmployee(EmployeeDto employeeDto, Long employeeId) {
+
+        // 存在チェック
+         Employee employee = employeeRepository.findById(employeeId).orElseThrow(
+                () -> new ResourceNotFoundException("Employee is not exist with ginven id: " + employeeId)
+        );
+//        // ↓これではDTOに無くてEntityにあるフィールドが消えてしまうのでNG
+//        Employee savedEmployee = employeeRepository.save(EmployeeMapper.mapToEmployee(employeeDto))
+        employee.setFirstName(employeeDto.getFirstName());
+        employee.setLastName(employeeDto.getLastName());
+        employee.setEmail(employeeDto.getEmail());
+
+        Employee updatedEmployee = employeeRepository.save(employee);
+        return EmployeeMapper.mapToEmployeeDto(updatedEmployee);
+    }
+
 
 }

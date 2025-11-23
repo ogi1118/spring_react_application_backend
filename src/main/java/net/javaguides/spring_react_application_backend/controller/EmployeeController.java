@@ -34,4 +34,10 @@ public class EmployeeController {
 //        return new ResponseEntity<>(employeeService.getEmployees(), HttpStatus.OK);
         return ResponseEntity.ok(employeeService.getEmployees()); //ResponseEntityのokメソッドでインスタンス作ってもOK
     }
+
+    @PutMapping("{id}")
+    public ResponseEntity<EmployeeDto> updateEmployee(@RequestBody EmployeeDto employeeDto, @PathVariable("id") Long id){
+        EmployeeDto updatedEmployeeDto = employeeService.updateEmployee(employeeDto, id);
+        return ResponseEntity.ok(updatedEmployeeDto);
+    }
 }

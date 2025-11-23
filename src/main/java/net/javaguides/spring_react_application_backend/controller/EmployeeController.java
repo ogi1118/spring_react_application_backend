@@ -5,6 +5,7 @@ import net.javaguides.spring_react_application_backend.dto.EmployeeDto;
 import net.javaguides.spring_react_application_backend.service.EmployeeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class EmployeeController {
 
     //おそらくRequestMappingナシで@PostMapping("/api/employees/")でも可
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<EmployeeDto> createEmployee(@RequestBody EmployeeDto employeeDto){
         EmployeeDto savedEmployee = employeeService.createEmployee(employeeDto);
         return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);
@@ -31,18 +33,21 @@ public class EmployeeController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<EmployeeDto>> getAllEmployees(){
 //        return new ResponseEntity<>(employeeService.getEmployees(), HttpStatus.OK);
         return ResponseEntity.ok(employeeService.getEmployees()); //ResponseEntityのokメソッドでインスタンス作ってもOK
     }
 
     @PutMapping("{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<EmployeeDto> updateEmployee(@RequestBody EmployeeDto employeeDto, @PathVariable("id") Long id){
         EmployeeDto updatedEmployeeDto = employeeService.updateEmployee(employeeDto, id);
         return ResponseEntity.ok(updatedEmployeeDto);
     }
 
     @DeleteMapping("{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteEmployee(@PathVariable("id") Long id){
         employeeService.deleteEmployee(id);
         return ResponseEntity.ok("Employee deleted.");

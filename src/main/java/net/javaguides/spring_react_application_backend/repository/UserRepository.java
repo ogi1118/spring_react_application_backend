@@ -9,6 +9,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // ユーザー認証、管理のための追加メソッド
 //    Optional<User> findByUsername(String email);
-    Optional<User> existsByEmail(String email);
+    boolean existsByEmail(String email);
     Optional<User> findByEmail(String email);
 }

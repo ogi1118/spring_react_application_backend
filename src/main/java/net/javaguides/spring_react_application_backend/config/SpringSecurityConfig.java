@@ -1,11 +1,15 @@
 package net.javaguides.spring_react_application_backend.config;
 
+import lombok.AllArgsConstructor;
+import net.javaguides.spring_react_application_backend.security.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -18,11 +22,16 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableMethodSecurity
+@AllArgsConstructor
 public class SpringSecurityConfig {
+
+    private UserDetailsServiceImpl userDetailsService;
 
     @Bean
     public static PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
+        PasswordEncoder p = new BCryptPasswordEncoder();
+        System.out.println(p.encode("password"));
+        return p;
     }
 
     @Bean
@@ -46,16 +55,9 @@ public class SpringSecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService(){
-        UserDetails userDetails = User.builder()
-                .username("user").password(passwordEncoder().encode("password"))
-                .roles("USER").build();
+//    @Bean
+//    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)throws Exception{
+//        return configuration.getAuthenticationManager();
+//    }
 
-        UserDetails admin = User.builder()
-                .username("admin").password(passwordEncoder().encode("password"))
-                .roles("ADMIN").build();
-
-        return new InMemoryUserDetailsManager(userDetails, admin);
-    }
 }

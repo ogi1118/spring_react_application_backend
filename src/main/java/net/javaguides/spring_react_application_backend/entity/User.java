@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Set;
 
@@ -23,8 +22,6 @@ public class User {
 
     @Column(nullable = false)
     private String name;
-    @Column(nullable = false)
-    private String username;
     @Column(nullable = false, unique = true)
     private String email;
     @Column(nullable = false)

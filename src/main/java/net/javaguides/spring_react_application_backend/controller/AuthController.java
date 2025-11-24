@@ -1,6 +1,7 @@
 package net.javaguides.spring_react_application_backend.controller;
 
 import lombok.AllArgsConstructor;
+import net.javaguides.spring_react_application_backend.dto.LoginDto;
 import net.javaguides.spring_react_application_backend.dto.RegisterDto;
 import net.javaguides.spring_react_application_backend.service.AuthService;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,12 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterDto registerDto){
         String response = authService.register(registerDto);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginDto loginDto){
+        String response = authService.login(loginDto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

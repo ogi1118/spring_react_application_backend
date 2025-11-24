@@ -1,6 +1,7 @@
 package net.javaguides.spring_react_application_backend.service;
 
 import lombok.AllArgsConstructor;
+import net.javaguides.spring_react_application_backend.dto.LoginDto;
 import net.javaguides.spring_react_application_backend.dto.RegisterDto;
 import net.javaguides.spring_react_application_backend.entity.Role;
 import net.javaguides.spring_react_application_backend.entity.User;
@@ -8,6 +9,10 @@ import net.javaguides.spring_react_application_backend.exception.EmployeeManagem
 import net.javaguides.spring_react_application_backend.repository.RoleRepository;
 import net.javaguides.spring_react_application_backend.repository.UserRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +27,7 @@ public class AuthServiceImpl implements AuthService{
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
+    private AuthenticationManager authenticationManager;
 
     @Override
     public String register(RegisterDto registerDto) {
@@ -45,5 +51,16 @@ public class AuthServiceImpl implements AuthService{
         userRepository.save(user);
 
         return "User Registered successfully";
+    }
+
+    public String login(LoginDto loginDto){
+
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                loginDto.getEmail(),
+                loginDto.getPassword()
+        ));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return "User logged-in successfully";
     }
 }

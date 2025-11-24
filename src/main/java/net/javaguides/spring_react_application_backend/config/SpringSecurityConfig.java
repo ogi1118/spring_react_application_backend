@@ -44,6 +44,7 @@ public class SpringSecurityConfig {
 //                    authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll(); // 開発用
                     // 上からパスが確認され、最初に一致したものが適用されるので例外的ルールは最初に記述
                     authorize.requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll();
+                    authorize.requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll();
                     authorize.requestMatchers(HttpMethod.GET, "/health").permitAll();
                     // 一般的、広範囲なルール
                     authorize.requestMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN");
@@ -57,10 +58,10 @@ public class SpringSecurityConfig {
         return http.build();
     }
 
-//    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)throws Exception{
-//        return configuration.getAuthenticationManager();
-//    }
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)throws Exception{
+        return configuration.getAuthenticationManager();
+    }
 //    @Bean
 //    public UserDetailsService userDetailsService(){
 //        UserDetails userDetails = User.builder()

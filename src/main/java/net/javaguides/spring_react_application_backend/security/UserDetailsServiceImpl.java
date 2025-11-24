@@ -26,9 +26,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not exists by given email"));
 
-        System.out.println("input email "+email);
-        System.out.println("db password "+user.getPassword());
-
         Set<GrantedAuthority> authorities = user.getRoles()
                 .stream().map((role) -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toSet());

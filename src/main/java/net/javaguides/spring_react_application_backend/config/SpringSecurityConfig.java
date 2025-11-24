@@ -29,9 +29,7 @@ public class SpringSecurityConfig {
 
     @Bean
     public static PasswordEncoder passwordEncoder(){
-        PasswordEncoder p = new BCryptPasswordEncoder();
-        System.out.println(p.encode("password"));
-        return p;
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -44,12 +42,16 @@ public class SpringSecurityConfig {
                     // Role Hierarchyを設定すれば、階層型の権限設定ができる
                     // 現在の実装だと権限は独立しているのでhasAnyRoleで列挙して指定
 //                    authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll(); // 開発用
+                    // 上からパスが確認され、最初に一致したものが適用されるので例外的ルールは最初に記述
+                    authorize.requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll();
+                    authorize.requestMatchers(HttpMethod.GET, "/health").permitAll();
+                    // 一般的、広範囲なルール
                     authorize.requestMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN");
                     authorize.requestMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN");
                     authorize.requestMatchers(HttpMethod.PATCH, "/api/**").hasRole("ADMIN");
                     authorize.requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN");
                     authorize.requestMatchers(HttpMethod.GET, "/api/**").hasAnyRole("ADMIN", "USER");
-                    authorize.requestMatchers(HttpMethod.GET, "/health").permitAll();
+                    // フォールバック
                     authorize.anyRequest().authenticated();
                 }).httpBasic(Customizer.withDefaults());
         return http.build();

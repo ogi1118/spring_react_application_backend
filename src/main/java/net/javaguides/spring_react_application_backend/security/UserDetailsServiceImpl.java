@@ -20,9 +20,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private UserRepository userRepository;
 
     // メールアドレスからユーザーを取得し、ログインフォーム情報と見つけたユーザーのセットを返している
+    // 今回はusernameフィールドがないが、
+    // SpringSecurityが自動的に呼び出すのはloadUserByUsernameメソッドで固定のため
+    // メソッド名はusername,変数はemailになっている
+    // おそらくSpringSecurityが言っているusernameは、ログイン時にパスワードと一緒に入力する情報
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
+        // メールorユーザーネームでログインにしたいときは
+        // findByUsernameも入れる
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not exists by given email"));
 
@@ -30,7 +36,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .stream().map((role) -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toSet());
         return new org.springframework.security.core.userdetails.User(
-                email,
+                user.getEmail(), // spring securityがusernameと認識
                 user.getPassword(),
                 authorities
         );
